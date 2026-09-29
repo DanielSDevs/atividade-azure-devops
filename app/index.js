@@ -111,10 +111,13 @@ app.get('/', (req, res) => {
 
 app.get('/tema', async (req, res) => {
     try {
-        // ALUNOS: Usem a configuração dbConfig para conectar no banco e fazer o SELECT na tabela do tema escolhido!
         await sql.connect(dbConfig);
-        const result = await sql.query`SELECT * FROM Futebol';
-        
+        const result = await sql.query`
+            SELECT j.Nome AS Jogador, j.Posicao, j.NumeroCamisa,
+                   t.Nome AS Time, t.Cidade, t.Estadio
+            FROM Jogadores j
+            INNER JOIN Times t ON j.TimeId = t.Id`;
+
         res.json(result.recordset);
     } catch (err) {
         console.error("Erro ao conectar no banco:", err);
